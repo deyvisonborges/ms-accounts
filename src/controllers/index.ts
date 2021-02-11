@@ -10,8 +10,9 @@ function getAccounts(req: Request, res: Response, next: NextFunction) {
 function getAccountById(req: Request, res: Response, next: NextFunction) {
   try {
     const id = parseInt(req.params.id);
-    const index = accounts.findIndex((item) => item.id === id);
+    if (!id) throw new Error("Type error: ID is from type int");
 
+    const index = accounts.findIndex((item) => item.id === id);
     if (index === -1) {
       return res.status(404).end();
     } else {
