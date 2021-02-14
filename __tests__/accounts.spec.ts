@@ -22,6 +22,19 @@ describe("Testando Rotas de Accounts", () => {
     expect(res.body.id).toBe(1);
   });
 
+  it("POST /accounts/ - Deve retornar status code 422", async () => {
+    let payload = {
+      id: 1,
+      name: "de",
+      email: "dev-test@gmail.com",
+      password: "dev",
+      valid: 2,
+    };
+    const res = await SuperTest(App).post(endpoints.base).send(payload);
+    expect(res.status).toEqual(422);
+    expect(res.body.id).toBe(1);
+  });
+
   it("POST /accounts/ - Deve retornar o JSON do novo usuario", async () => {
     let payload = {
       id: 1,
