@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from "express";
 import { IAccount } from "../models";
-import AccountRepository, { AccountModel } from "../models/accountModel";
+import Repository from "../models/accountModel";
 
-const accounts: IAccount[] = [];
+import Auth from "../auth";
 
 async function getAccounts(req: Request, res: Response, next: NextFunction) {
-  const accounts = await AccountRepository.findAll<AccountModel>();
+  const accounts = await Repository.findAll();
   res.json(
     accounts.map((item) => {
       item.password = "";
@@ -14,27 +14,49 @@ async function getAccounts(req: Request, res: Response, next: NextFunction) {
   );
 }
 
-function getAccountById(req: Request, res: Response, next: NextFunction) {
+async function getAccountById(req: Request, res: Response, next: any) {
   try {
     const id = parseInt(req.params.id);
     if (!id) throw new Error("Type error: ID is from type int");
 
-    const index = accounts.findIndex((item) => item.id === id);
-    if (index === -1) {
+    const account = await Repository.findById(id);
+
+    if (account === null) {
       return res.status(404).end();
     } else {
-      return res.status(200).json(accounts[index]);
+      account.password = "";
+      return res.status(200).json(account);
     }
   } catch (err) {
     res.status(400).end();
   }
 }
 
-function addAccount(req: Request, res: Response, next: NextFunction) {
+async function addAccount(req: Request, res: Response, next: NextFunction) {
   try {
     const newAccount = req.body as IAccount;
-    accounts.push(newAccount);
-    res.status(201).json(newAccount);
+    newAccount.password = Auth.hashPassword(newAccount.password);
+
+    const result = await Repository.add(newAccount);
+    newAccount.password = "";
+    newAccount.id = result.id;
+
+    res.status(201).json(result);
+  } catch (err) {
+    res.status(400).end();
+  }
+}
+
+async function setAccount(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = parseInt(req.params.id);
+    if (!id) throw new Error("Type error: ID is from type int");
+
+    const accountParams = req.body as IAccount;
+    const updatedAccount = await Repository.set(id, accountParams);
+
+    updatedAccount.password = "";
+    res.status(200).json(updatedAccount);
   } catch (err) {
     res.status(400).end();
   }
@@ -44,4 +66,5 @@ export default {
   getAccounts,
   getAccountById,
   addAccount,
+  setAccount,
 };

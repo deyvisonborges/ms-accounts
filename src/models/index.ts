@@ -2,7 +2,7 @@ import Joi from "joi";
 import { join } from "path";
 import { AccountStatus } from "./accounts-status";
 export interface IAccount {
-  id: number;
+  id?: number;
   name: string;
   email: string;
   password: string;
@@ -16,7 +16,7 @@ const AccountSchema = Joi.object({
   email: Joi.string().email().min(8).max(50).required(),
   password: Joi.string().min(6).max(50),
   status: Joi.number().integer().min(100).max(400),
-  domain: Joi.string(),
+  domain: Joi.string().min(5).max(150),
 });
 
 export { AccountSchema };
