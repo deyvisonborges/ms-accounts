@@ -16,7 +16,7 @@ const accountModel = Database.define<AccountModel>("account", {
     allowNull: false,
   },
   name: {
-    type: Sequelize.STRING(150),
+    type: Sequelize.STRING,
     allowNull: false,
   },
   email: {
