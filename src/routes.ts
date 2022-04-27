@@ -2,7 +2,7 @@ import { Router, Request, Response } from "express";
 import AccountsController from "./controllers";
 import { AccountSchema } from "./models";
 
-const endpoints = {
+export const endpoints = {
   base: "/accounts",
 };
 

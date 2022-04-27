@@ -1,6 +1,6 @@
 import SuperTest from "supertest";
 import App from "../src/app";
-import { endpoints } from "../src/routes/endpoints";
+import { endpoints } from "../src/routes";
 
 describe("Testando Rotas de Accounts", () => {
   it("GET /accounts/ - Deve retornar status code 200", async () => {

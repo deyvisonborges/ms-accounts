@@ -6,7 +6,7 @@ import Database from "./db";
     const port = parseInt(`${process.env.PORT}`);
     await Database.sync();
     await App.listen(port);
-  } catch (err) {
+  } catch (err: any) {
     throw new Error(err);
   }
 })();
