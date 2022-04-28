@@ -15,6 +15,8 @@ function comparePassword(password: string, hashedPassword: string) {
   return Bcrypt.compareSync(password, hashedPassword);
 }
 
+// autenticacao assimetrica
+
 type Token = {
   accountId: number;
 };
